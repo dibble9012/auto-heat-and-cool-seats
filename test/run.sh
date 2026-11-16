@@ -92,6 +92,11 @@ scenario "negative limit" '{"cold_below":-10,"wheel":false}' "$ON" "" 'echo -3 >
 scenario "under a negative limit" '{"cold_below":-10,"wheel":false}' "$ON" "seat_heat driver medium" 'echo -10.5 > $T/r/outside_temp_f'
 scenario "no temperature: nothing" '{}' "$ON" "" 'rm $T/r/outside_temp_f'
 scenario "nonsense temperature: nothing" '{}' "$ON" "" 'echo 400 > $T/r/outside_temp_f'
+scenario "-40 at startup, then mild: nothing" '{}' $'1\n1\n1\ntemp 77\n1\n1\n1' "" 'echo -40 > $T/r/outside_temp_f'
+scenario "-40.0 at startup, then cold: heat" '{"wheel":false}' $'1\n1\n1\ntemp 40\n1\n1\n1' "seat_heat driver medium" 'echo -40.0 > $T/r/outside_temp_f'
+scenario "-40 that never changes: nothing" '{}' "$ON" "" 'echo -40 > $T/r/outside_temp_f'
+scenario "-40 C at startup: nothing" '{"unit":"c"}' "$ON" "" 'echo -40 > $T/r/outside_temp'
+scenario "-39.9 is still a temperature: heat" '{"wheel":false}' "$ON" "seat_heat driver medium" 'echo -39.9 > $T/r/outside_temp_f'
 scenario "off, then a new start" '{"wheel":false}' $'1\n1\n1\n0\n0\n0\n0\n0\n1\n1\n1\n1\n1' $'seat_heat driver medium\nseat_heat driver medium'
 scenario "off for one read: a new start" '{"wheel":false}' $'1\n1\n1\n0\n1\n1\n1' $'seat_heat driver medium\nseat_heat driver medium'
 scenario "stays READY: only once" '{"wheel":false}' "$ON$'\n'$ON" "seat_heat driver medium"

@@ -85,7 +85,9 @@ comes back at the next start that needs it.
   mod also catches a head unit that boots after the car is READY, or that wakes from sleep
   (a jump in `/proc/uptime`).
 - It takes `outside_temp_f` or `outside_temp`, waiting as long as the car stays on for a first
-  value. With no sensible value, it does nothing.
+  value. With no sensible value, it does nothing. Right after the car starts, climate control
+  can report -40 before it has a reading, so the mod treats exactly -40 (°F or °C) as no value
+  yet and keeps waiting. A real -40 is skipped too.
 - It sends `seat_heat`, `seat_vent` and `wheel_heat` through `hmgapid vehicle-do`. HMG-API
   calls the car's methods by name, so the mod has no service numbers of its own.
 - It leaves a seat alone if it's already heating or cooling, and doesn't touch the wheel if

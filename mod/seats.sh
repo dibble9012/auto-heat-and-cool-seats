@@ -69,6 +69,7 @@ outside() {   # the outside temperature in tenths of the settings' unit; fails i
     if [ "$unit" = c ]; then [ $t -ge -500 ] && [ $t -le 600 ] || return 1
     else [ $t -ge -580 ] && [ $t -le 1400 ] || return 1
     fi
+    [ $t = -400 ] && return 1   # -40, the same in F and C: climate control's value before it has a reading
     echo $t
 }
 
